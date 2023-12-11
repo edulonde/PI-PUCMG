@@ -1,6 +1,7 @@
 from django.db import models
-from django.urls import reverse # Used to generate URLs by reversing the URL patterns
-import uuid # Required for unique book instances
+from django.urls import reverse  # Used to generate URLs by reversing the URL patterns
+import uuid  # Required for unique book instances
+
 
 class Genre(models.Model):
     """Model representing a book genre."""
@@ -10,6 +11,9 @@ class Genre(models.Model):
         help_text="Insira um gênero de livro (por exemplo, Ficção Científica, Poesia Francesa etc.)"
     )
 
+    class Meta:
+        verbose_name = 'Gênero'
+        verbose_name_plural = 'Gêneros'
 
     def __str__(self):
         """String for representing the Model object."""
@@ -18,6 +22,7 @@ class Genre(models.Model):
     def get_absolute_url(self):
         """Returns the url to access a particular genre instance."""
         return reverse('genre-detail', args=[str(self.id)])
+
 
 class Book(models.Model):
     """Model representing a book (but not a specific copy of a book)."""
@@ -33,6 +38,10 @@ class Book(models.Model):
     # Genre class has already been defined so we can specify the object above.
     genre = models.ManyToManyField(
         Genre, help_text="Selecione um gênero para esse livro.")
+
+    class Meta:
+        verbose_name = 'Livro'
+        verbose_name_plural = 'Livros'
 
     def display_genre(self):
         """Create a string for the Genre. This is required to display genre in Admin."""
@@ -60,7 +69,6 @@ class Book(models.Model):
         help_text='Selecione o idioma do livro',
     )
 
-
     def __str__(self):
         """String for representing the Model object."""
         return self.title
@@ -69,14 +77,18 @@ class Book(models.Model):
         """Returns the URL to access a detail record for this book."""
         return reverse('book-detail', args=[str(self.id)])
 
-class BookInstance(models.Model):
 
+class BookInstance(models.Model):
     """Model representing a specific copy of a book (i.e. that can be borrowed from the library)."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                           help_text="ID único para este livro específico em toda a biblioteca")
     book = models.ForeignKey('Book', on_delete=models.RESTRICT, null=True)
     imprint = models.CharField(max_length=200)
     due_back = models.DateField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Exemplar'
+        verbose_name_plural = 'Exemplares'
 
     LOAN_STATUS = (
         ('m', 'Manutenção'),
@@ -100,6 +112,7 @@ class BookInstance(models.Model):
         """String for representing the Model object."""
         return f'{self.id} ({self.book.title})'
 
+
 class Author(models.Model):
     """Model representing an author."""
     first_name = models.CharField(max_length=100)
@@ -109,6 +122,8 @@ class Author(models.Model):
 
     class Meta:
         ordering = ['last_name', 'first_name']
+        verbose_name = 'Autor'
+        verbose_name_plural = 'Autores'
 
     def get_absolute_url(self):
         """Returns the URL to access a particular author instance."""
