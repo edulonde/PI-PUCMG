@@ -114,6 +114,8 @@ class BookInstance(models.Model):
         ordering = ['due_back']
         verbose_name = 'Exemplar'
         verbose_name_plural = 'Exemplares'
+        permissions = (("can_mark_returned", "Set book as returned"),)
+
 
     def __str__(self):
         """String for representing the Model object."""
