@@ -1,8 +1,7 @@
 from django.shortcuts import render
 from django.views import generic
 from .models import Book, Author, BookInstance, Genre
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
