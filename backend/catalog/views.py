@@ -90,6 +90,7 @@ class LoanedBooksAllListView(PermissionRequiredMixin, generic.ListView):
 @login_required
 @permission_required('catalog.can_mark_returned', raise_exception=True)
 def renew_book_librarian(request, pk):
+    """View function for renewing a specific BookInstance by librarian."""
     book_instance = get_object_or_404(BookInstance, pk=pk)
 
     # If this is a POST request then process the Form data
@@ -107,7 +108,7 @@ def renew_book_librarian(request, pk):
             # redirect to a new URL:
             return HttpResponseRedirect(reverse('all-borrowed'))
 
-    # If this is a GET (or any other method) create the default form.
+    # If this is a GET (or any other method) create the default form
     else:
         proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
         form = RenewBookForm(initial={'renewal_date': proposed_renewal_date})
