@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
+
+from .forms import BookForm
 from .models import Book, Author, BookInstance, Genre
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponseRedirect
@@ -147,4 +149,28 @@ class AuthorDelete(PermissionRequiredMixin, DeleteView):
         except Exception as e:
             return HttpResponseRedirect(
                 reverse("author-delete", kwargs={"pk": self.object.pk})
+            )
+
+class BookCreate(PermissionRequiredMixin, CreateView):
+    model = Book
+    form_class = BookForm
+    permission_required = 'catalog.add_book'
+
+class BookUpdate(PermissionRequiredMixin, UpdateView):
+    model = Book
+    fields = '__all__'
+    permission_required = 'catalog.change_book'
+
+class BookDelete(PermissionRequiredMixin, DeleteView):
+    model = Book
+    success_url = reverse_lazy('books')
+    permission_required = 'catalog.delete_book'
+
+    def form_valid(self, form):
+        try:
+            self.object.delete()
+            return HttpResponseRedirect(self.success_url)
+        except Exception as e:
+            return HttpResponseRedirect(
+                reverse("book-delete", kwargs={"pk": self.object.pk})
             )

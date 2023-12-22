@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 import datetime  # for checking renewal date range.
+from .models import Book
 
 from django import forms
 
@@ -23,3 +24,16 @@ class RenewBookForm(forms.Form):
 
         # Remember to always return the cleaned data.
         return data
+
+
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ['title', 'author', 'summary', 'genre', 'language']
+        labels = {
+            'title': 'Título',
+            'author': 'Autor',
+            'summary': 'Sinopse',
+            'genre': 'Gênero',
+            'language': 'Idioma',
+        }

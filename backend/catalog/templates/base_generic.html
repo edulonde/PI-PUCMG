@@ -28,7 +28,10 @@
                 {% if user.is_staff %}
                 <li><a href="{% url 'all-borrowed' %}">Todos empréstimos</a></li>
                 {% if perms.catalog.add_author %}
-                <li><a href="{% url 'author-create' %}">Create author</a></li>
+                <li><a href="{% url 'author-create' %}">Cadastrar Autor</a></li>
+                {% endif %}
+                {% if perms.catalog.add_book %}
+                <li><a href="{% url 'book-create' %}">Cadastrar Livro</a></li>
                 {% endif %}
                 {% else %}
                 <li><a href="{% url 'my-borrowed' %}">Meus empréstimos</a></li>
