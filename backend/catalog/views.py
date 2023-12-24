@@ -57,7 +57,7 @@ class BookDetailView(generic.DetailView):
 
 class AuthorListView(generic.ListView):
     model = Author
-    paginate_by = 5
+    paginate_by = 10
 
 
 class AuthorDetailView(generic.DetailView):
@@ -151,15 +151,18 @@ class AuthorDelete(PermissionRequiredMixin, DeleteView):
                 reverse("author-delete", kwargs={"pk": self.object.pk})
             )
 
+
 class BookCreate(PermissionRequiredMixin, CreateView):
     model = Book
     form_class = BookForm
     permission_required = 'catalog.add_book'
 
+
 class BookUpdate(PermissionRequiredMixin, UpdateView):
     model = Book
     fields = '__all__'
     permission_required = 'catalog.change_book'
+
 
 class BookDelete(PermissionRequiredMixin, DeleteView):
     model = Book
