@@ -1,71 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+    <!--TITLE-->
     {% block title %}
-    <title>Local Library</title>
+    <title>Beeblius</title>
     {% endblock %}
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-    <!-- Add additional CSS in static file -->
+    <!--TAILWINDCSS-->
     {% load static %}
-
     <link rel="stylesheet" href="{% static 'src/output.css' %}"/>
 
+    <!--VUEJS-->
+    <script src="https://unpkg.com/vue@next"></script>
+
+
 </head>
-<body>
-<div class="">
-    <div class="flex">
-        <div class="w-1/4 bg-gray-200 p-4">
-            {% block sidebar %}
-            <ul class="sidebar-nav ">
-                <li><a href="{% url 'index' %}">Início</a></li>
-                <li><a href="{% url 'books' %}">Livros</a></li>
-                <li><a href="{% url 'authors' %}">Autores</a></li>
-                {% if user.is_authenticated %}
-                <li>User: {{ user.get_username }}</li>
-                {% if user.is_staff %}
-                <li><a href="{% url 'all-borrowed' %}">Todos empréstimos</a></li>
-                {% if perms.catalog.add_author %}
-                <li><a href="{% url 'author-create' %}">Cadastrar Autor</a></li>
-                {% endif %}
-                {% if perms.catalog.add_book %}
-                <li><a href="{% url 'book-create' %}">Cadastrar Livro</a></li>
-                {% endif %}
-                {% else %}
-                <li><a href="{% url 'my-borrowed' %}">Meus empréstimos</a></li>
-                {% endif %}
-                <li><a href="{% url 'logout' %}?next={{ request.path }}">Logout</a></li>
-                {% else %}
-                <li><a href="{% url 'login' %}?next={{ request.path }}">Login</a></li>
-                {% endif %}
-            </ul>
+<body id="app">
+<div class="h-screen flex flex-col">
 
+
+    <!--HEADER-->
+    {% block header %}
+    {% include 'base/header.html' %}
+    {% endblock %}
+
+
+    <div class="flex flex-grow">
+        <!--MENU-->
+        {% block sidebar %}
+        {% include 'base/menu.html' %}
+        {% endblock %}
+
+
+        <!--MAIN-->
+        <div id="main" v-bind:class="{ 'w-3/4': showMenu, 'w-full': !showMenu }"
+             class="w-3/4 p-4">
+
+            <!--SEARCHBAR-->
+            {% block searchbar %}
+            {% include 'base/searchbar.html' %}
             {% endblock %}
 
-        </div>
-        <div class="w-3/4 p-4 bg-blue-400">{% block content %}{% endblock %}
+            <!--CONTENT-->
+            {% block content %}
+            {% endblock %}
 
+            <!--PAGINATION-->
             {% block pagination %}
-            {% if is_paginated %}
-            <div class="pagination">
-            <span class="page-links">
-                {% if page_obj.has_previous %}
-                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
-                {% endif %}
-                <span class="page-current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                </span>
-                {% if page_obj.has_next %}
-                    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
-                {% endif %}
-            </span>
-            </div>
-            {% endif %}
+            {% include 'base/pagination.html' %}
             {% endblock %}
-
         </div>
+
     </div>
+
+    <!--FOOTER-->
+    {% block footer %}
+    {% include 'base/footer.html' %}
+    {% endblock %}
+
 </div>
+
+   <!--SCRIPT-->
+    <script src="{% static 'js/app.js' %}"></script>
+
+
 </body>
 </html>
