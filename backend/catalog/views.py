@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
-
+from django.db.models import Count
 from .forms import BookForm
 from .models import Book, Author, BookInstance, Genre
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -13,32 +13,10 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 
 def index(request):
-    """View function for home page of site."""
-
-    # Generate counts of some of the main objects
-    num_books = Book.objects.all().count()
-    num_instances = BookInstance.objects.all().count()
-
-    # Available books (status = 'd')
-    num_instances_disponivel = BookInstance.objects.filter(status__exact='d').count()
-    num_instances_emprestado = BookInstance.objects.filter(status__exact='e').count()
-    num_instances_manutencao = BookInstance.objects.filter(status__exact='m').count()
-    num_instances_reservado = BookInstance.objects.filter(status__exact='r').count()
-
-    # The 'all()' is implied by default.
-    num_authors = Author.objects.count()
-
-    num_genres = Genre.objects.count()
+    all_genres = Genre.objects.all()
 
     context = {
-        'num_books': num_books,
-        'num_instances': num_instances,
-        'num_instances_disponivel': num_instances_disponivel,
-        'num_instances_emprestado': num_instances_emprestado,
-        'num_instances_manutencao': num_instances_manutencao,
-        'num_instances_reservado': num_instances_reservado,
-        'num_authors': num_authors,
-        'num_genres': num_genres,
+        'all_genres': all_genres.annotate(num_books=Count('book')).order_by('?'),
 
     }
 
@@ -63,6 +41,20 @@ class AuthorListView(generic.ListView):
 class AuthorDetailView(generic.DetailView):
     model = Author
 
+class GenreListView(generic.ListView):
+    model = Genre
+    paginate_by = 10
+
+def books_by_genre(request, pk):
+    genre = get_object_or_404(Genre, pk=pk)
+    books = Book.objects.filter(genre=genre)
+
+    context = {
+        'genre': genre,
+        'books': books,
+    }
+
+    return render(request, 'catalog/books_by_genre.html', context)
 
 class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
     """Generic class-based view listing books on loan to current user."""
@@ -177,3 +169,34 @@ class BookDelete(PermissionRequiredMixin, DeleteView):
             return HttpResponseRedirect(
                 reverse("book-delete", kwargs={"pk": self.object.pk})
             )
+
+def dashboard(request):
+    # Generate counts of some of the main objects
+    num_books = Book.objects.all().count()
+    num_instances = BookInstance.objects.all().count()
+
+    # Available books (status = 'd')
+    num_instances_disponivel = BookInstance.objects.filter(status__exact='d').count()
+    num_instances_emprestado = BookInstance.objects.filter(status__exact='e').count()
+    num_instances_manutencao = BookInstance.objects.filter(status__exact='m').count()
+    num_instances_reservado = BookInstance.objects.filter(status__exact='r').count()
+
+    # The 'all()' is implied by default.
+    num_authors = Author.objects.count()
+
+    num_genres = Genre.objects.count()
+
+    context = {
+        'num_books': num_books,
+        'num_instances': num_instances,
+        'num_instances_disponivel': num_instances_disponivel,
+        'num_instances_emprestado': num_instances_emprestado,
+        'num_instances_manutencao': num_instances_manutencao,
+        'num_instances_reservado': num_instances_reservado,
+        'num_authors': num_authors,
+        'num_genres': num_genres,
+
+    }
+
+    # Render the HTML template index.html with the data in the context variable
+    return render(request, 'dashboard.html', context=context)

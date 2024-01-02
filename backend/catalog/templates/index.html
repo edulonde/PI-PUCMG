@@ -1,18 +1,31 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1 class=" font-bold">Sistema Gerenciamento de Emprésimos</h1>
+
+<!--SEÇÃO GÊNEROS-->
+<div id="lista-generos">
+
+    <div id="titulo-lista-genero"
+         class="flex items-center justify-center pt-2">
+        <h1 class="mr-2 inline-block font-bold">Explore por gêneros</h1>
+        <a href="{% url 'genres' %}" class="text-xs text-blue-500 underline inline-block self-end">Ver todos</a>
+    </div>
+
+    <div class="w-full h-auto p-2 flex items-center justify-center overflow-auto">
+        {% for genre in all_genres|slice:":4" %}
+
+        <a href="{% url 'books-by-genre' genre.id %}">
+            <div class="w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 m-2 flex items-center justify-center border border-gray-500 rounded">
+            <span class="text-xs sm:text-base flex items-center justify-center"
+            >{{ genre.name }}</span>
+
+            </div>
+        </a>
 
 
-  <p>A biblioteca tem as seguintes contagens de registros:</p>
-  <ul>
-    <li><strong>Livros:</strong> {{ num_books }}</li>
-    <li><strong>Exemplares:</strong> {{ num_instances }}</li>
-    <li><strong>Exemplares disponíveis:</strong> {{ num_instances_disponivel }}</li>
-    <li><strong>Exemplares emprestados:</strong> {{ num_instances_emprestado }}</li>
-    <li><strong>Exemplares em manutenção:</strong> {{ num_instances_manutencao }}</li>
-    <li><strong>Exemplares reservados:</strong> {{ num_instances_reservado }}</li>
-    <li><strong>Autores:</strong> {{ num_authors }}</li>
-    <li><strong>Gêneros:</strong> {{ num_genres }}</li>
-  </ul>
+        {% endfor %}
+    </div>
+
+</div>
+
 {% endblock %}

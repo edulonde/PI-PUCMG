@@ -7,61 +7,78 @@
     <ul
             id="menu-list"
             class=" pl-4 ">
+
+
+        <!--INÍCIO - LIVROS - AUTORES-->
         <li class="my-2 px-2 hover:bg-gray-300 rounded">
-            <a href="{% url 'index' %}">Início</a>
+            <a href="{% url 'index' %}" class="block">Início</a>
         </li>
         <li class="my-2 px-2 hover:bg-gray-300 rounded">
-            <a href="{% url 'books' %}">Livros</a>
+            <a href="{% url 'books' %}" class="block">Livros</a>
         </li>
         <li class="my-2 px-2 hover:bg-gray-300 rounded">
-            <a href="{% url 'authors' %}">Autores</a>
+            <a href="{% url 'authors' %}" class="block">Autores</a>
         </li>
         <hr>
 
+        <!--USUÁRIOS AUTENTICADOS-->
         {% if user.is_authenticated %}
         <li class="my-2 px-2 hover:bg-gray-300 rounded">User: {{ user.get_username }}</li>
 
+        <!--TODOS EMPRÉSTIMOS - STAFF-->
         {% if user.is_staff %}
         <li class="my-2 px-2 hover:bg-gray-300 rounded">
-            <a href="{% url 'all-borrowed' %}">Todos empréstimos</a></li>
+            <a href="{% url 'all-borrowed' %}" class="block">Todos empréstimos</a></li>
 
-        <li
-                class="my-2 px-2 hover:bg-gray-300 rounded cursor-pointer flex justify-between"
-                @click=" showDropdown=!showDropdown">
+        <li class="my-2 px-2 hover:bg-gray-300 rounded">
+            <a href="{% url 'dashboard' %}" class="block">Relatório</a>
+        </li>
 
-            Cadastro
 
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                 stroke="currentColor" class="w-4 h-4 inline-block">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M19 9l-7 7-7-7"/>
-            </svg>
-            <ul v-show="showDropdown" class="mt-2 ">
+        <!--DROPDOWN MENU - CADASTRO -->
+        <li class="my-2 px-2  rounded cursor-pointer flex flex-col relative"
+            @click=" showDropdown=!showDropdown">
+    <span class="hover:bg-gray-300">Cadastro <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                  stroke-width="1.5"
+                                                  stroke="currentColor" class="w-4 h-4 inline-block">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M19 9l-7 7-7-7"/>
+    </svg></span>
+
+
+            <ul v-bind:class="{ 'block': showDropdown, 'hidden': !showDropdown }"
+                class="mt-2 z-10 transform transition-all duration-200 ease-in-out">
+
                 {% if perms.catalog.add_author %}
                 <li class="my-2 px-2 hover:bg-gray-300 rounded ">
-                    <a href="{% url 'author-create' %}">Cadastrar Autor</a>
+                    <a href="{% url 'author-create' %}" class="block">Cadastrar Autor</a>
                 </li>
                 {% endif %}
+
                 {% if perms.catalog.add_book %}
                 <li class="my-2 px-2 hover:bg-gray-300 rounded ">
-                    <a href="{% url 'book-create' %}">Cadastrar Livro</a>
+                    <a href="{% url 'book-create' %}" class="block">Cadastrar Livro</a>
                 </li>
                 {% endif %}
             </ul>
         </li>
 
 
+        <!--MEUS EMPRÉSTIMOS - CLIENTE-->
         {% else %}
         <li class="my-2 px-2 hover:bg-gray-300 rounded">
-            <a href="{% url 'my-borrowed' %}">Meus empréstimos</a></li>
+            <a href="{% url 'my-borrowed' %}" class="block">Meus empréstimos</a></li>
         {% endif %}
 
         <hr>
+
+
+        <!--LOGIN/LOGOUT-->
         <li class="my-2 px-2 hover:bg-gray-300 rounded">
-            <a href="{% url 'logout' %}?next={{ request.path }}">Logout</a></li>
+            <a href="{% url 'logout' %}?next={{ request.path }}" class="block">Logout</a></li>
         {% else %}
         <li class="my-2 px-2 hover:bg-gray-300 rounded">
-            <a href="{% url 'login' %}?next={{ request.path }}">Login</a></li>
+            <a href="{% url 'login' %}?next={{ request.path }}" class="block">Login</a></li>
         {% endif %}
     </ul>
 

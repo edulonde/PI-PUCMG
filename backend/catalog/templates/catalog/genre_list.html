@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+
+{% block content %}
+
+<h1
+        class="font-bold">Gêneros</h1>
+
+{% if genre_list %}
+<ul>
+    {% for genre in genre_list %}
+    <li>
+        <a href="{% url 'books-by-genre' genre.id %}">{{ genre.name }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Não há gêneros cadastrados.</p>
+{% endif %}
+
+{% endblock %}
+```
