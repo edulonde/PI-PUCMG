@@ -3,14 +3,20 @@
 {% block content %}
   <h1>Livros</h1>
   {% if book_list %}
-    <ul>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {% for book in book_list %}
-      <li>
-        <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
-        ({{book.author}})
-      </li>
+        <div class="max-w-sm rounded overflow-hidden shadow-lg m-2 border border-gray-500 border-opacity-50">
+          <div class="px-6 py-4">
+            <div class="font-bold text-xl mb-2">
+              <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+            </div>
+            <p class="text-gray-700 text-base">
+              {{book.author}}
+            </p>
+          </div>
+        </div>
       {% endfor %}
-    </ul>
+    </div>
   {% else %}
     <p>There are no books in the library.</p>
   {% endif %}

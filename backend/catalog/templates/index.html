@@ -28,4 +28,33 @@
 
 </div>
 
+
+
+<!--SEÇÃO NOVOS LIVROS-->
+<div id="lista-livros">
+
+    <div id="titulo-lista-livros"
+         class="flex items-center justify-center pt-2">
+        <h1 class="mr-2 inline-block font-bold">Novos Livros</h1>
+        <a href="{% url 'books' %}" class="text-xs text-blue-500 underline inline-block self-end">Ver todos</a>
+    </div>
+
+    <div class="w-full h-auto p-2 flex items-center justify-center overflow-auto">
+        {% for book in last_books %}
+
+        <a href="{% url 'book-detail' book.id %}">
+            <div class="w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 m-2 flex items-center justify-center border border-gray-500 rounded">
+            <span class="text-xs sm:text-base flex items-center justify-center"
+            >{{ book.title }}</span>
+
+            </div>
+        </a>
+
+        {% endfor %}
+    </div>
+
+</div>
+
 {% endblock %}
+
+

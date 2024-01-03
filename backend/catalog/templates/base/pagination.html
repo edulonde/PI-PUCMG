@@ -1,15 +1,24 @@
 {% if is_paginated %}
-            <div class="pagination">
-            <span class="page-links">
-                {% if page_obj.has_previous %}
-                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
-                {% endif %}
-                <span class="page-current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                </span>
-                {% if page_obj.has_next %}
-                    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
-                {% endif %}
-            </span>
-            </div>
-            {% endif %}
+<div class="pagination flex justify-center items-center p-4 m-4">
+
+    <span class="page-links">
+        {% if page_obj.has_previous %}
+            <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}"
+               class="bg-blue-500 hover:bg-blue-700
+               text-white font-bold py-1 px-2 sm:py-2 sm:px-4 rounded
+                text-xs sm:text-base">Prev</a>
+        {% endif %}
+        <span
+                class="page-current font-bold text-gray-700 px-2 py-1
+                text-xs sm:text-base">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="{{ request.path }}?page={{ page_obj.next_page_number }}"
+               class="bg-blue-500 hover:bg-blue-700 text-white
+               font-bold py-1 px-2 sm:py-2 sm:px-4 rounded text-xs sm:text-base">Next</a>
+        {% endif %}
+    </span>
+</div>
+{% endif %}

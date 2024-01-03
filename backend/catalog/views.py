@@ -14,9 +14,11 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 def index(request):
     all_genres = Genre.objects.all()
+    last_books = Book.objects.all().order_by('-id')[:4]
 
     context = {
         'all_genres': all_genres.annotate(num_books=Count('book')).order_by('?'),
+        'last_books': last_books,
 
     }
 
