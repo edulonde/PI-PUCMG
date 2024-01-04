@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{% static 'src/output.css' %}"/>
 
     <!--VUEJS-->
-    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
 
 </head>
@@ -29,6 +29,7 @@
 
 
     <div class="flex flex-grow">
+
         <!--MENU-->
         {% block sidebar %}
         {% include 'base/menu.html' %}
@@ -36,8 +37,8 @@
 
 
         <!--MAIN-->
-        <div id="main" v-bind:class="{ 'w-3/4': showMenu, 'w-full': !showMenu }"
-             class="w-3/4 p-4">
+        <div id="main"
+             class="w-full p-4">
 
             <!--SEARCHBAR-->
             {% block searchbar %}
