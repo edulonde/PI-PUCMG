@@ -1,15 +1,30 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Renew: {{ book_instance.book.title }}</h1>
-  <p>Borrower: {{ book_instance.borrower }}</p>
-  <p {% if book_instance.is_overdue %} class="text-danger"{% endif %} >Due date: {{ book_instance.due_back }}</p>
+<div class="flex flex-col justify-center bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
+    <h1 class="mt-6 text-2xl font-extrabold text-gray-900">Renovar: {{ book_instance.book.title }}</h1>
+    <p class="mt-2 text-lg text-gray-700">Emprestado por: {{ book_instance.borrower }}</p>
+    <p class="mt-2 text-lg text-gray-700 {% if book_instance.is_overdue %}text-red-500{% endif %}">Data de devolução: {{ book_instance.due_back }}</p>
 
-  <form action="" method="post">
-    {% csrf_token %}
-    <table>
-    {{ form.as_table }}
-    </table>
-    <input type="submit" value="Submit">
-  </form>
+    <form action="" method="post" class="mt-8 space-y-4 max-w-md">
+        {% csrf_token %}
+        <div>
+            <label for="{{ form.renewal_date.id_for_label }}"
+                   class="block text-sm font-medium text-gray-700">Data de renovação</label>
+            <input id="{{ form.renewal_date.id_for_label }}"
+                   type="date"
+                   name="{{ form.renewal_date.html_name }}"
+                   class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none
+            focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                   value="{{ form.renewal_date.value|date:'Y-m-d' }}">
+        </div>
+        <div>
+            <input type="submit"
+                   value="Confirmar"
+                   class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium
+           rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2
+           focus:ring-offset-2 focus:ring-indigo-500">
+        </div>
+    </form>
+</div>
 {% endblock %}

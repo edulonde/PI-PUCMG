@@ -1,46 +1,105 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Título: {{ book.title }}</h1>
+<div id="container_book_detail" class="max-w-screen-md ">
+    <!--CARD LIVRO-->
+    <div id="card_info_livro"
+         class="border border-gray-300 p-4 rounded-lg shadow-lg mt-5">
 
-  <p><strong>Autor:</strong> <a href="{{ book.author.get_absolute_url }}">{{ book.author }}</a></p>
-  <!-- author detail link not yet defined -->
-  <p><strong>Sinopse:</strong> {{ book.summary }}</p>
-  <p><strong>Idioma:</strong> {{ book.language }}</p>
-  <p><strong>Gênero:</strong> {{ book.genre.all|join:", " }}</p>
+        <!--TÍTULO-->
+        <h1 class="text-center text-4xl sm:text-5xl font-bold text-shadow-lg pt-5 pb-3 w-full
+    text-center text-shadow-lg pt-5 pb-3 ">
+            {{ book.title }}
+        </h1>
 
-  <div style="margin-left:20px;margin-top:20px">
-    <h4>Exemplares</h4>
+        <!--AUTOR-->
+        <p class="text-right text-opacity-75 text-base">
+            <a href="{{ book.author.get_absolute_url }}">{{ book.author }}</a>
+        </p>
 
-    {% for copy in book.bookinstance_set.all %}
-      <hr />
-      <p
-        class="{% if copy.status == 'd' %}text-success{% elif copy.status == 'm' %}text-danger{% else %}text-warning{% endif %}">
-        {{ copy.get_status_display }}
-      </p>
-      {% if copy.status != 'd' %}
-        <p><strong>Data devolução:</strong> {{ copy.due_back }}</p>
-      {% endif %}
-      <p><strong>Impressão:</strong> {{ copy.imprint }}</p>
-      <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
-    {% endfor %}
-  </div>
+        <!--SUMÁRIO-->
+        <span id="toggle-summary-btn"
+              @click="toggleSummary"
+              class="ml-2 flex items-center w-full font-bold text-gray-500 mb-4"
+        >Sinopse
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+         class="w-4 h-4">
+  <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
+</svg>
+
+    </span>
+
+        <p id="book-summary"
+           class="text-base md:text-lg mx-2 text-justify mt-2 pb-3"
+           v-if="showSummary">
+            {{ book.summary }}
+        </p>
+
+        <!--TAGS GÊNERO-->
+        {% for genre in book.genre.all %}
+        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+        #{{ genre.name }}
+    </span>
+        {% endfor %}
+
+
+        <!--AÇÕES DO STAFF-->
+        {% if perms.catalog.change_author or perms.catalog.delete_author %}
+        <ul class="flex justify-end space-x-4">
+            {% if perms.catalog.change_book %}
+            <li>
+                <a class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                   href="{% url 'book-update' book.id %}">
+                    Editar
+                </a>
+            </li>
+            {% endif %}
+            {% if not book.bookinstance_set.all and perms.catalog.delete_author %}
+            <li><a href="{% url 'book-delete' book.id %}">Deletar</a></li>
+
+            {% endif %}
+        </ul>
+    </div>
+
+
+    <!--EXEMPLARES-->
+    <div class="mx-4 mt-10 flex flex-wrap ">
+        <h4 class="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-semibold text-gray-700">
+            Exemplares
+        </h4>
+
+        <div class="flex flex-row flex-wrap space-x-4 justify-center items-center">
+            <!--CARDS - EXEMPLARES-->
+            {% for copy in book.bookinstance_set.all %}
+            <div class="w-80 border border-gray-300 p-4 rounded-lg shadow-lg mt-5 ">
+                <hr/>
+
+                <p
+                        class="{% if copy.status == 'd' %}text-success{% elif copy.status == 'm' %}text-danger{% else %}text-warning{% endif %}">
+
+                <span class="inline-block h-4 w-4 rounded-full mr-2
+            {% if copy.status == 'd' %}bg-green-500
+            {% elif copy.status == 'r' %}bg-yellow-500
+            {% elif copy.status == 'e' %}bg-orange-500
+            {% elif copy.status == 'm' %}bg-red-500
+            {% endif %}"
+                ></span>
+                    {{ copy.get_status_display }}
+
+                </p>
+
+                {% if copy.status != 'd' %}
+
+                <p><strong>Disponível: </strong> {{ copy.due_back }}</p>
+                {% endif %}
+                <p><strong>Impressão:</strong> {{ copy.imprint }}</p>
+                <p class="text-gray-400 text-sm"><strong>Id:</strong> {{ copy.id }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endif %}
 {% endblock %}
 
-{% block sidebar %}
-  {{ block.super }}
-
-  {% if perms.catalog.change_author or perms.catalog.delete_author %}
-  <hr>
-  <ul class="sidebar-nav">
-    {% if perms.catalog.change_book %}
-    <li><a href="{% url 'book-update' book.id %}">Modificar Livro</a></li>
-    {% endif %}
-    {% if not book.bookinstance_set.all and perms.catalog.delete_author %}
-    <li><a href="{% url 'book-delete' book.id %}">Deletar Livro</a></li>
-
-    {% endif %}
-    </ul>
-  {% endif %}
-
-{% endblock %}

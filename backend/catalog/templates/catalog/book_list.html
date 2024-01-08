@@ -1,23 +1,25 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Livros</h1>
-  {% if book_list %}
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {% for book in book_list %}
-        <div class="max-w-sm rounded overflow-hidden shadow-lg m-2 border border-gray-500 border-opacity-50">
-          <div class="px-6 py-4">
+<h1 class="text-4xl sm:text-5xl font-bold text-center py-4">Livros</h1>
+{% if book_list %}
+
+<!--SEÇÃO CARDS LIVROS-->
+<div class=" justify-center items-center grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
+    {% for book in book_list %}
+    <div class="max-w-sm rounded overflow-hidden shadow-lg m-2 border border-gray-500 border-opacity-50">
+        <div class="px-6 py-4">
             <div class="font-bold text-xl mb-2">
-              <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+                <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
             </div>
             <p class="text-gray-700 text-base">
-              {{book.author}}
+                {{book.author}}
             </p>
-          </div>
         </div>
-      {% endfor %}
     </div>
-  {% else %}
-    <p>There are no books in the library.</p>
-  {% endif %}
+    {% endfor %}
+</div>
+{% else %}
+<p>There are no books in the library.</p>
+{% endif %}
 {% endblock %}

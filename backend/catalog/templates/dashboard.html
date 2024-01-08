@@ -1,20 +1,35 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<h1>Relatório</h1>
+<div class="container mx-auto p-4">
+    <h1 class="text-2xl font-semibold mb-4">Relatório</h1>
 
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Contagens de Registros -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <p class="text-gray-600 text-lg mb-4">Registros</p>
+            <ul>
+                <li><strong>Livros:</strong> {{ num_books }}</li>
+                <li><strong>Exemplares:</strong> {{ num_instances }}</li>
+                <li><strong>Autores:</strong> {{ num_authors }}</li>
+                <li><strong>Gêneros:</strong> {{ num_genres }}</li>
+            </ul>
+        </div>
 
+        <!-- Outras Seções do Dashboard (Adicione conforme necessário) -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <p class="text-gray-600 text-lg mb-4">Status</p>
 
+            <ul>
 
-  <p>A biblioteca tem as seguintes contagens de registros:</p>
-  <ul>
-    <li><strong>Livros:</strong> {{ num_books }}</li>
-    <li><strong>Exemplares:</strong> {{ num_instances }}</li>
-    <li><strong>Exemplares disponíveis:</strong> {{ num_instances_disponivel }}</li>
-    <li><strong>Exemplares emprestados:</strong> {{ num_instances_emprestado }}</li>
-    <li><strong>Exemplares em manutenção:</strong> {{ num_instances_manutencao }}</li>
-    <li><strong>Exemplares reservados:</strong> {{ num_instances_reservado }}</li>
-    <li><strong>Autores:</strong> {{ num_authors }}</li>
-    <li><strong>Gêneros:</strong> {{ num_genres }}</li>
-  </ul>
+                <li><strong>Disponíveis:</strong> {{ num_instances_disponivel }}</li>
+                <li><strong>Emprestados:</strong> {{ num_instances_emprestado }}</li>
+                <li><strong>Manutenção:</strong> {{ num_instances_manutencao }}</li>
+                <li><strong>Reservados:</strong> {{ num_instances_reservado }}</li>
+            </ul>
+        </div>
+
+        <!-- Mais Seções do Dashboard (Adicione conforme necessário) -->
+    </div>
+</div>
 {% endblock %}

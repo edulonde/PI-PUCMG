@@ -1,47 +1,64 @@
 {% extends "base_generic.html" %}
-
-
-
-
 {% block content %}
 
+<!--TÍTULO-->
+<h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center py-4">{{ author.last_name }}</h1>
 
+<!--STAFF-->
+{% if perms.catalog.change_author or perms.catalog.delete_author %}
+<hr>
+<ul class="sidebar-nav flex justify-end space-x-4">
+    {% if perms.catalog.change_author %}
+    <li class="bg-blue-500 text-white rounded px-4 py-2 cursor-pointer hover:bg-blue-700">
+        <a href="{% url 'author-update' author.id %}">Modificar autor</a>
+    </li>
+    {% endif %}
+    {% if not author.book_set.all and perms.catalog.delete_author %}
+    <li class="bg-blue-500 text-white rounded px-4 py-2 cursor-pointer hover:bg-blue-700">
+        <a href="{% url 'author-delete' author.id %}">Deletar autor</a>
+    </li>
+    {% endif %}
+</ul>
+{% endif %}
 
-  <h1>Author: {{ author.last_name  }}</h1>
-
-  <p><strong>Author:</strong> <a href="">{{ author.last_name  }}</a></p>
-  <!-- author detail link not yet defined -->
-
-
-  <div style="margin-left:20px;margin-top:20px">
-    <h4>Books</h4>
+<!--LIVROS-->
+<div>
+    <h4>Livros</h4>
 
     {% for book in author.book_set.all %}
-      <hr />
-      <p>
+    <hr/>
+
+    <p class="text-2xl sm:text-3xl font-bold py-2">
         <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
-      </p>
-      <p><strong>Summary:</strong> {{ book.summary }}</p>
-      <p><strong>ISBN:</strong> {{ book.isbn }}</p>
-      <p><strong>Language:</strong> {{ book.language }}</p>
-      <p><strong>Genre:</strong> {{ book.genre.all|join:", " }}</p>
+    </p>
+
+    <p class=" flex"
+       @click="toggleSummaryAuthorDetail()">
+
+
+
+        <strong>Sumário</strong>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+             class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
+        </svg>
+    </p>
+
+    <p class=""
+       v-if="showSummaryAuthorDetail">
+        {{ book.summary }}
+    </p>
+
+    <p><strong>Idioma:</strong> {{ book.language }}</p>
+    <p><strong>Gêneros:</strong> {{ book.genre.all|join:", " }}</p>
+    <hr>
     {% endfor %}
-  </div>
+
+</div>
 {% endblock %}
 
 {% block sidebar %}
-  {{ block.super }}
+{{ block.super }}
 
-  {% if perms.catalog.change_author or perms.catalog.delete_author %}
-  <hr>
-  <ul class="sidebar-nav">
-    {% if perms.catalog.change_author %}
-      <li><a href="{% url 'author-update' author.id %}">Modificar autor</a></li>
-    {% endif %}
-    {% if not author.book_set.all and perms.catalog.delete_author %}
-      <li><a href="{% url 'author-delete' author.id %}">Deletar autor</a></li>
-    {% endif %}
-    </ul>
-  {% endif %}
 
 {% endblock %}

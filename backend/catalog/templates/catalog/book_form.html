@@ -1,11 +1,83 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<form action="" method="post">
-  {% csrf_token %}
-  <table>
-    {{ form.as_table }}
-  </table>
-  <input type="submit" value="Submit" />
-</form>
+<div class="flex flex-col  justify-center bg-gray-50 py-6 px-4 sm:px-6 lg:px-8 ">
+    <h1 class="mt-6 text-2xl font-extrabold text-gray-900">Cadastrar Livro</h1>
+    <form action="" method="post" class="space-y-4 max-w-lg">
+        {% csrf_token %}
+        <div>
+            <label for="{{ form.title.id_for_label }}"
+                   class="block text-sm font-medium text-gray-700">Título</label>
+            <input id="{{ form.title.id_for_label }}"
+                   type="text"
+                   name="{{ form.title.html_name }}"
+                   class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none
+            focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                   placeholder="Título"
+                   value="{{ form.title.value|default:'' }}">
+        </div>
+        <div>
+            <label for="{{ form.author.id_for_label }}"
+                   class="block text-sm font-medium text-gray-700">Autor</label>
+            <select id="{{ form.author.id_for_label }}"
+                    name="{{ form.author.html_name }}"
+                    class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none
+            focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                {% for author in form.author.field.queryset %}
+                <option value="{{ author.pk }}"
+                        {% if form.author.value == author.pk %}selected{% endif %}>
+                    {{ author }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="{{ form.summary.id_for_label }}"
+                   class="block text-sm font-medium text-gray-700">Resumo</label>
+            <textarea id="{{ form.summary.id_for_label }}"
+                      name="{{ form.summary.html_name }}"
+                      class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none
+            focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      placeholder="Resumo">{{ form.summary.value|default:'' }}</textarea>
+        </div>
+        <div>
+            <label for="{{ form.genre.id_for_label }}"
+                   class="block text-sm font-medium text-gray-700">Gênero</label>
+            <select id="{{ form.genre.id_for_label }}"
+                    name="{{ form.genre.html_name }}"
+                    multiple
+                    class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none
+            focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                {% for genre in form.genre.field.queryset %}
+                <option value="{{ genre.pk }}"
+                        {% if genre.pk in form.genre.value %}selected{% endif %}>
+                    {{ genre }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="{{ form.language.id_for_label }}"
+                   class="block text-sm font-medium text-gray-700">Idioma</label>
+            <select id="{{ form.language.id_for_label }}"
+                    name="{{ form.language.html_name }}"
+                    class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none
+            focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                {% for value, display_name in form.language.field.choices %}
+                <option value="{{ value }}"
+                        {% if form.language.value == value %}selected{% endif %}>
+                    {{ display_name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <input type="submit"
+                   value="Confirmar"
+                   class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium
+           rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2
+           focus:ring-offset-2 focus:ring-indigo-500">
+        </div>
+    </form>
+</div>
 {% endblock %}

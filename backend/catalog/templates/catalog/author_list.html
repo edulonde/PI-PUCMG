@@ -1,17 +1,29 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Lista de Autores</h1>
-  {% if author_list %}
-    <ul>
-      {% for author in author_list %}
-      <li>
-        <a href="{{ author.get_absolute_url }}">{{ author.first_name}} {{ author.last_name  }}</a>
+<h1 class="text-4xl sm:text-5xl font-bold text-center py-4">Autores</h1>
+{% if author_list %}
 
-      </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>There are no authors in the library.</p>
-  {% endif %}
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
+    {% for author in author_list %}
+
+    <!--CARD-->
+    <div class="flex border border-gray-300 p-4 rounded-lg ">
+
+        <!--PHOTO-->
+        <div class="w-12 h-12 sm:w-12.5 sm:h-12.5 bg-gray-300 mr-4"></div>
+
+        <!--NOME-->
+        <div class="flex items-center">
+            <a class="text-lg text-blue-500 hover:text-blue-700"
+               href="{{ author.get_absolute_url }}">{{ author.first_name}} {{ author.last_name }}</a>
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
+{% else %}
+
+<p class="text-lg text-red-500">There are no authors in the library.</p>
+{% endif %}
 {% endblock %}

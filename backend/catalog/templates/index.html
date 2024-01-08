@@ -14,14 +14,11 @@
     <div class="w-full h-auto p-2 flex items-center justify-center overflow-auto">
         {% for genre in all_genres|slice:":4" %}
 
-        <a href="{% url 'books-by-genre' genre.id %}">
-            <div class="w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 m-2 flex items-center justify-center border border-gray-500 rounded">
-            <span class="text-xs sm:text-base flex items-center justify-center"
-            >{{ genre.name }}</span>
-
-            </div>
+        <a href="{% url 'books-by-genre' genre.id %}"
+           class="w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 m-2 flex items-center justify-center border
+           border-gray-500 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-transform duration-200 ease-in-out">
+            <span class="text-xs sm:text-base flex items-center justify-center">{{ genre.name }}</span>
         </a>
-
 
         {% endfor %}
     </div>
@@ -42,12 +39,10 @@
     <div class="w-full h-auto p-2 flex items-center justify-center overflow-auto">
         {% for book in last_books %}
 
-        <a href="{% url 'book-detail' book.id %}">
-            <div class="w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 m-2 flex items-center justify-center border border-gray-500 rounded">
-            <span class="text-xs sm:text-base flex items-center justify-center"
-            >{{ book.title }}</span>
-
-            </div>
+        <a href="{% url 'book-detail' book.id %}"
+           class="w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 m-2 flex items-center justify-center
+           border border-gray-500 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-transform duration-200 ease-in-out">
+            <span class="text-xs sm:text-base flex items-center justify-center">{{ book.title }}</span>
         </a>
 
         {% endfor %}
@@ -56,5 +51,3 @@
 </div>
 
 {% endblock %}
-
-
