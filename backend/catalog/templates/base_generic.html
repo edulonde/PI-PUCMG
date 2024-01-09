@@ -4,7 +4,7 @@
 
     <!--TITLE-->
     {% block title %}
-    <title>Beeblius</title>
+    <title>Início</title>
     {% endblock %}
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -14,9 +14,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 
+
+
     <!--TAILWINDCSS-->
     {% load static %}
     <link rel="stylesheet" href="{% static 'src/output.css' %}"/>
+
+    <!--FAVICON-->
+    <link rel="icon" type="image/x-icon" href="{% static 'img/bee.ico' %}">
 
     <!--VUEJS-->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
