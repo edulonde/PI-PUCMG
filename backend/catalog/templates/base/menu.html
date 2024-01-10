@@ -1,8 +1,8 @@
 <div
         id="menu"
         v-show="showMenu"
-        class="w-2/4 md:w-1/4 bg-gray-400 p-4
-               border border-black ">
+        class="w-2/4 md:w-1/4 bg-amber-500 p-4
+                ">
 
     <ul
             id="menu-list"
@@ -10,13 +10,13 @@
 
 
         <!--INÍCIO - LIVROS - AUTORES-->
-        <li class="my-2 px-2 hover:bg-gray-300 rounded">
+        <li class="my-2 px-2 hover:bg-amber-200 rounded">
             <a href="{% url 'index' %}" class="block">Início</a>
         </li>
-        <li class="my-2 px-2 hover:bg-gray-300 rounded">
+        <li class="my-2 px-2 hover:bg-amber-200 rounded">
             <a href="{% url 'books' %}" class="block">Livros</a>
         </li>
-        <li class="my-2 px-2 hover:bg-gray-300 rounded">
+        <li class="my-2 px-2 hover:bg-amber-200 rounded">
             <a href="{% url 'authors' %}" class="block">Autores</a>
         </li>
         <hr>
@@ -27,10 +27,10 @@
 
         <!--Renovar - STAFF-->
         {% if user.is_staff %}
-        <li class="my-2 px-2 hover:bg-gray-300 rounded">
+        <li class="my-2 px-2 hover:bg-amber-200 rounded">
             <a href="{% url 'all-borrowed' %}" class="block">Renovar</a></li>
 
-        <li class="my-2 px-2 hover:bg-gray-300 rounded">
+        <li class="my-2 px-2 hover:bg-amber-200 rounded">
             <a href="{% url 'dashboard' %}" class="block">Relatório</a>
         </li>
 
@@ -38,7 +38,7 @@
         <!--DROPDOWN MENU - CADASTRO -->
         <li class="my-2 px-2  rounded cursor-pointer flex flex-col relative"
             @click=" showDropdown=!showDropdown">
-    <span class="hover:bg-gray-300">Cadastrar
+    <span class="hover:bg-amber-200">Cadastrar
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                   stroke-width="1.5"
                                                   stroke="currentColor" class="w-4 h-4 inline-block">
@@ -50,13 +50,13 @@
                 class="mt-2 z-10 transform transition-all duration-200 ease-in-out">
 
                 {% if perms.catalog.add_author %}
-                <li class="my-2 px-2 hover:bg-gray-300 rounded ">
+                <li class="my-2 px-2 hover:bg-amber-200 rounded ">
                     <a href="{% url 'author-create' %}" class="block">Cadastrar Autor</a>
                 </li>
                 {% endif %}
 
                 {% if perms.catalog.add_book %}
-                <li class="my-2 px-2 hover:bg-gray-300 rounded ">
+                <li class="my-2 px-2 hover:bg-amber-200 rounded ">
                     <a href="{% url 'book-create' %}" class="block">Cadastrar Livro</a>
                 </li>
                 {% endif %}
@@ -66,7 +66,7 @@
 
         <!--MEUS EMPRÉSTIMOS - CLIENTE-->
         {% else %}
-        <li class="my-2 px-2 hover:bg-gray-300 rounded">
+        <li class="my-2 px-2 hover:bg-amber-200 rounded">
             <a href="{% url 'my-borrowed' %}" class="block">Meus empréstimos</a></li>
         {% endif %}
 
@@ -74,10 +74,10 @@
 
 
         <!--LOGIN/LOGOUT-->
-        <li class="my-2 px-2 hover:bg-gray-300 rounded">
+        <li class="my-2 px-2 hover:bg-amber-200 rounded">
             <a href="{% url 'logout' %}?next={{ request.path }}" class="block">Logout</a></li>
         {% else %}
-        <li class="my-2 px-2 hover:bg-gray-300 rounded">
+        <li class="my-2 px-2 hover:bg-amber-200 rounded">
             <a href="{% url 'login' %}?next={{ request.path }}" class="block">Login</a></li>
         {% endif %}
     </ul>
