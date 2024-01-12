@@ -1,3 +1,4 @@
+{% load static %}
 <div
         id="menu"
         v-show="showMenu"
@@ -10,38 +11,73 @@
 
 
         <!--INÍCIO - LIVROS - AUTORES-->
-        <li class="my-2 px-2 hover:bg-amber-200 rounded">
-            <a href="{% url 'index' %}" class="block">Início</a>
+        <li class="my-2 px-2 hover:bg-amber-200 rounded flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                 stroke="currentColor" class="w-6 h-6 opacity-85">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/>
+            </svg>
+
+            <a href="{% url 'index' %}" class="block ml-2 text-gray-800">
+                Início</a>
         </li>
-        <li class="my-2 px-2 hover:bg-amber-200 rounded">
-            <a href="{% url 'books' %}" class="block">Livros</a>
+
+        <li class="my-2 px-2 hover:bg-amber-200 rounded flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                 stroke="currentColor" class="w-6 h-6 opacity-85">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"/>
+            </svg>
+
+            <a href="{% url 'books' %}" class="block ml-2 text-gray-800">Livros</a>
         </li>
-        <li class="my-2 px-2 hover:bg-amber-200 rounded">
-            <a href="{% url 'authors' %}" class="block">Autores</a>
+
+        <li class="my-2 px-2 hover:bg-amber-200 rounded flex items-center">
+            <img src="{% static 'img/author_icon.svg' %}"
+                 alt=""
+                 class="h-4 opacity-85">
+            <a href="{% url 'authors' %}"
+               class="block ml-2 text-gray-800">
+                Autores
+            </a>
         </li>
+
         <hr>
 
         <!--USUÁRIOS AUTENTICADOS-->
         {% if user.is_authenticated %}
-        <li class="my-2 px-2 rounded">User: {{ user.get_username }}</li>
+        <li class="my-2 px-2 rounded text-gray-800">User: {{ user.get_username }}</li>
 
         <!--Renovar - STAFF-->
         {% if user.is_staff %}
-        <li class="my-2 px-2 hover:bg-amber-200 rounded">
-            <a href="{% url 'all-borrowed' %}" class="block">Renovar</a></li>
+        <li class="my-2 px-2 hover:bg-amber-200 rounded flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                 stroke="currentColor" class="w-6 h-6 opacity-85">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3"/>
+            </svg>
 
-        <li class="my-2 px-2 hover:bg-amber-200 rounded">
-            <a href="{% url 'dashboard' %}" class="block">Relatório</a>
+            <a href="{% url 'all-borrowed' %}" class="block ml-2 text-gray-800">Renovar</a></li>
+
+        <li class="my-2 px-2 hover:bg-amber-200 rounded flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                 stroke="currentColor" class="w-6 h-6 opacity-85">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"/>
+            </svg>
+
+
+            <a href="{% url 'dashboard' %}" class="block ml-2 text-gray-800">Relatório</a>
         </li>
 
 
         <!--DROPDOWN MENU - CADASTRO -->
         <li class="my-2 px-2  rounded cursor-pointer flex flex-col relative"
             @click=" showDropdown=!showDropdown">
-    <span class="hover:bg-amber-200">Cadastrar
+    <span class="hover:bg-amber-200 text-gray-800">Cadastrar
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                  stroke-width="1.5"
-                                                  stroke="currentColor" class="w-4 h-4 inline-block">
+             stroke-width="1.5"
+             stroke="currentColor" class="w-4 h-4 inline-block ">
         <path stroke-linecap="round" stroke-linejoin="round"
               d="M19 9l-7 7-7-7"/>
     </svg></span>
@@ -50,14 +86,20 @@
                 class="mt-2 z-10 transform transition-all duration-200 ease-in-out">
 
                 {% if perms.catalog.add_author %}
-                <li class="my-2 px-2 hover:bg-amber-200 rounded ">
-                    <a href="{% url 'author-create' %}" class="block">Cadastrar Autor</a>
+                <li class="my-2 px-2 hover:bg-amber-200 rounded flex items-center">
+                    <img class="h-4 opacity-85"
+                         src="{% static 'img/author_plus_icon.svg' %}" alt="">
+
+
+                    <a href="{% url 'author-create' %}" class="block ml-2 text-gray-800">Cadastrar Autor</a>
                 </li>
                 {% endif %}
 
                 {% if perms.catalog.add_book %}
-                <li class="my-2 px-2 hover:bg-amber-200 rounded ">
-                    <a href="{% url 'book-create' %}" class="block">Cadastrar Livro</a>
+                <li class="my-2 px-2 hover:bg-amber-200 rounded flex items-center">
+                    <img class="h-4 opacity-85"
+                         src="{% static 'img/book_plus_icon.svg' %}" alt="">
+                    <a href="{% url 'book-create' %}" class="block ml-2 text-gray-800">Cadastrar Livro</a>
                 </li>
                 {% endif %}
             </ul>
@@ -67,7 +109,7 @@
         <!--MEUS EMPRÉSTIMOS - CLIENTE-->
         {% else %}
         <li class="my-2 px-2 hover:bg-amber-200 rounded">
-            <a href="{% url 'my-borrowed' %}" class="block">Meus empréstimos</a></li>
+            <a href="{% url 'my-borrowed' %}" class="block text-gray-800">Meus empréstimos</a></li>
         {% endif %}
 
         <hr>
@@ -75,10 +117,10 @@
 
         <!--LOGIN/LOGOUT-->
         <li class="my-2 px-2 hover:bg-amber-200 rounded">
-            <a href="{% url 'logout' %}?next={{ request.path }}" class="block">Logout</a></li>
+            <a href="{% url 'logout' %}?next={{ request.path }}" class="block text-gray-800">Logout</a></li>
         {% else %}
         <li class="my-2 px-2 hover:bg-amber-200 rounded">
-            <a href="{% url 'login' %}?next={{ request.path }}" class="block">Login</a></li>
+            <a href="{% url 'login' %}?next={{ request.path }}" class="block text-gray-800">Login</a></li>
         {% endif %}
     </ul>
 
