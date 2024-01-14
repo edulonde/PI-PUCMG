@@ -7,6 +7,7 @@ django-on-heroku==1.1.2
 gunicorn==21.2.0
 packaging==23.2
 psycopg2-binary==2.9.9
+python-dotenv==1.0.0
 rcssmin==1.1.1
 rjsmin==1.2.1
 sqlparse==0.4.4
