@@ -16,7 +16,9 @@
 
 </head>
 
-<div id="header" class=" bg-amber-300 border-b border-gray-200 p-3 md:p-4 lg:p-6 flex items-center justify-between">
+<div id="header"
+     class=" bg-amber-300 border-b border-gray-200 p-3 md:p-4 lg:p-6 flex items-center justify-between
+            ">
 
     <button
             id="toggle-menu"
@@ -39,16 +41,16 @@
 
     </button>
 
-    <div id="logo">
-
+    <div id="logo" class="border-4 border-double border-black rounded-lg px-2">
+        <a href="{% url 'index' %}">
         <span
                 class="text-right text-1xl font-bold ">
             Beeblius
         </span>
-        <img src="{% static 'img/bee.png' %}"
-             alt="Logo"
-             class="inline-block w-12 ">
-
+            <img src="{% static 'img/bee.png' %}"
+                 alt="Logo"
+                 class="inline-block w-12 ">
+        </a>
     </div>
-
+    <div></div>
 </div>
