@@ -29,8 +29,8 @@
                     <input id="username" name="{{ form.username.name }}"
                            type="text"
                            required
-                           class="appearance-none rounded-none relative block w-full px-3 py-2
-                 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md
+                           class=" mb-4 appearance-none relative block w-full px-3 py-2
+                 border border-gray-300 placeholder-gray-500 text-gray-900
                  focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                            placeholder="Nome de usuário">
                 </div>
@@ -42,9 +42,9 @@
                            name="{{ form.password.name }}"
                            type="password"
                            required
-                           class="appearance-none rounded-none relative block w-full px-3 py-2 border
-                 border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none
-                 focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                           class="appearance-none  relative block w-full px-3 py-2 border
+                 border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none
+                 focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm rounded-md"
                            placeholder="Senha">
                 </div>
 
@@ -67,12 +67,25 @@
             </div>
         </form>
 
-        <!--ESQUECEU SENHA-->
+        <!--CRIAR CONTA-->
         <p class="mt-2 text-center text-sm text-gray-600">
-            <a href="{% url 'password_reset' %}" class="font-medium text-indigo-600 hover:text-indigo-500">
+            <a href="{% url 'password_reset' %}"
+               class="font-medium text-indigo-600 hover:text-indigo-500">
+                Criar nova conta
+            </a>
+        </p>
+
+
+        <!--ESQUECEU SENHA-->
+        <p class=" text-center text-sm text-gray-600">
+            <a href="{% url 'password_reset' %}"
+               class="font-medium text-indigo-600 hover:text-indigo-500">
                 Esqueceu sua senha?
             </a>
         </p>
+
+
+
     </div>
 
 </div>
