@@ -69,15 +69,18 @@
 
         <!--CRIAR CONTA-->
         <a href="{% url 'register' %}"
-           class="flex justify-center items-center mt-4 bg-gradient-to-r from-light-purple to-dark-purple text-gray-900 py-2 px-6 rounded border border-gray-300 rounded transition duration-500 ease-in-out hover:from-dark-purple hover:to-light-purple transform hover:scale-105 transition-transform
-font-bold px-2 ">
+           class=" ">
             Ainda não é cadastrado? &nbsp;
             <span
-            class="transition-transform hover:text-lg hover:text-dark-purple">
+            class="font-extrabold">
                  Cadastre agora!
             </span>
         </a>
+        <br>
+        <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a>
+        <br>
 
+        <a href="{% url 'social:begin' 'github' %}">Login with GitHub</a>
 
         <!--ESQUECEU SENHA-->
         <p class=" text-center text-sm text-gray-600">
