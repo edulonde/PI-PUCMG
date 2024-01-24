@@ -1,7 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
 from django.db.models import Count
-from .forms import BookForm
+from .forms import BookForm, NewUserForm
 from .models import Book, Author, BookInstance, Genre
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponseRedirect
@@ -10,6 +10,9 @@ import datetime
 from django.contrib.auth.decorators import login_required, permission_required
 from catalog.forms import RenewBookForm
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth import login, forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
 
 
 def index(request):
@@ -43,9 +46,11 @@ class AuthorListView(generic.ListView):
 class AuthorDetailView(generic.DetailView):
     model = Author
 
+
 class GenreListView(generic.ListView):
     model = Genre
     paginate_by = 10
+
 
 def books_by_genre(request, pk):
     genre = get_object_or_404(Genre, pk=pk)
@@ -57,6 +62,7 @@ def books_by_genre(request, pk):
     }
 
     return render(request, 'catalog/books_by_genre.html', context)
+
 
 class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
     """Generic class-based view listing books on loan to current user."""
@@ -172,6 +178,7 @@ class BookDelete(PermissionRequiredMixin, DeleteView):
                 reverse("book-delete", kwargs={"pk": self.object.pk})
             )
 
+
 def dashboard(request):
     # Generate counts of some of the main objects
     num_books = Book.objects.all().count()
@@ -202,3 +209,17 @@ def dashboard(request):
 
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'dashboard.html', context=context)
+
+
+def register_request(request):
+    if request.method == 'POST':
+        form = NewUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+        else:
+            messages.error(request, " Ocorreu um erro ao cadastrar o usuário.")
+    else:
+        form = NewUserForm()
+    context = {"form": form}
+    return render(request=request, template_name="registration/register.html", context=context)

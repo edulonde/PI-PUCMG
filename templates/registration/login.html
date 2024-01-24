@@ -61,19 +61,22 @@
                 <button type="submit"
                         class="group relative w-full flex justify-center py-2 px-4 border border-transparent
                 text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none
-                focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ">
                     Entrar
                 </button>
             </div>
         </form>
 
         <!--CRIAR CONTA-->
-        <p class="mt-2 text-center text-sm text-gray-600">
-            <a href="{% url 'password_reset' %}"
-               class="font-medium text-indigo-600 hover:text-indigo-500">
-                Criar nova conta
-            </a>
-        </p>
+        <a href="{% url 'register' %}"
+           class="flex justify-center items-center mt-4 bg-gradient-to-r from-light-purple to-dark-purple text-gray-900 py-2 px-6 rounded border border-gray-300 rounded transition duration-500 ease-in-out hover:from-dark-purple hover:to-light-purple transform hover:scale-105 transition-transform
+font-bold px-2 ">
+            Ainda não é cadastrado? &nbsp;
+            <span
+            class="transition-transform hover:text-lg hover:text-dark-purple">
+                 Cadastre agora!
+            </span>
+        </a>
 
 
         <!--ESQUECEU SENHA-->
@@ -83,7 +86,6 @@
                 Esqueceu sua senha?
             </a>
         </p>
-
 
 
     </div>

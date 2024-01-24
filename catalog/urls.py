@@ -19,5 +19,6 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('genres', views.GenreListView.as_view(), name='genres'),
     path('genre/<int:pk>/books/', views.books_by_genre, name='books-by-genre'),
+    path('register', views.register_request, name="register"),
 
 ]
