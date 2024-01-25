@@ -223,3 +223,12 @@ def register_request(request):
         form = NewUserForm()
     context = {"form": form}
     return render(request=request, template_name="registration/register.html", context=context)
+
+
+class MyAccountView(LoginRequiredMixin, generic.TemplateView):
+    template_name = 'catalog/my_account.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.request.user
+        return context

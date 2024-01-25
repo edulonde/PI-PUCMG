@@ -3,27 +3,31 @@ const app = Vue.createApp({
             return {
                 showMenu: false,
                 showDropdown: false,
+                showDropdownAccount: false,
                 showSummary: false,
-                showSummaryAuthorDetail:false,
+                showSummaryAuthorDetail: false,
                 statusClasses: {
-                'd': 'bg-green-500',
-                'r': 'bg-yellow-500',
-                'e': 'bg-orange-500',
-                'm': 'bg-red-500',
-            },
+                    'd': 'bg-green-500',
+                    'r': 'bg-yellow-500',
+                    'e': 'bg-orange-500',
+                    'm': 'bg-red-500',
+                },
 
 
             }
         },
-    methods: {
+        methods: {
             toggleSummary() {
                 this.showSummary = !this.showSummary
             },
             toggleSummaryAuthorDetail() {
                 this.showSummaryAuthorDetail = !this.showSummaryAuthorDetail
+            },
+            toggleDropdownAccount() {
+                this.showDropdownAccount = !this.showDropdownAccount
             }
 
-    }
+        }
 
 
     }
