@@ -46,7 +46,7 @@
 
         <!--USUÁRIOS AUTENTICADOS-->
         {% if user.is_authenticated %}
-        <li class="my-2 px-2 rounded text-gray-800">User: {{ user.get_username }}</li>
+        <li class="my-2 px-2 rounded text-gray-800">{{ user.get_username }}</li>
 
         <!--Renovar - STAFF-->
         {% if user.is_staff %}
@@ -106,10 +106,13 @@
         </li>
 
 
-        <!--MEUS EMPRÉSTIMOS - CLIENTE-->
+        <!--MEUS LIVROS - CLIENTE-->
         {% else %}
         <li class="my-2 px-2 hover:bg-amber-200 rounded">
-            <a href="{% url 'my-borrowed' %}" class="block text-gray-800">Meus empréstimos</a></li>
+
+
+
+            <a href="{% url 'my-borrowed' %}" class="block text-gray-800">Meus Livros</a></li>
         {% endif %}
 
         <hr>
@@ -117,10 +120,10 @@
 
         <!--LOGIN/LOGOUT-->
         <li class="my-2 px-2 hover:bg-amber-200 rounded">
-            <a href="{% url 'logout' %}?next={{ request.path }}" class="block text-gray-800">Logout</a></li>
+            <a href="{% url 'logout' %}?next={{ request.path }}" class="block text-gray-800">Sair</a></li>
         {% else %}
         <li class="my-2 px-2 hover:bg-amber-200 rounded">
-            <a href="{% url 'login' %}?next={{ request.path }}" class="block text-gray-800">Login</a></li>
+            <a href="{% url 'login' %}?next={{ request.path }}" class="block text-gray-800">Entrar</a></li>
         {% endif %}
     </ul>
 

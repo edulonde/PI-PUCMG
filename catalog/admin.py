@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Author, Genre, Book, BookInstance
+from .models import Author, Genre, Book, BookInstance, Favorite
 
 # admin.site.register(Book)
 # admin.site.register(Author)
@@ -41,3 +41,7 @@ class BookInstanceAdmin(admin.ModelAdmin):
         }),
     )
 
+@admin.register(Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ('user', 'book')
+    list_filter = ('user', 'book')

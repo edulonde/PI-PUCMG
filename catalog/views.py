@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
 from django.db.models import Count
 from .forms import BookForm, NewUserForm
-from .models import Book, Author, BookInstance, Genre
+from .models import Book, Author, BookInstance, Genre, Favorite
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
@@ -32,6 +32,12 @@ def index(request):
 class BookListView(generic.ListView):
     model = Book
     paginate_by = 6
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context['favorite_books'] = [favorite.book for favorite in Favorite.objects.filter(user=self.request.user)]
+        return context
 
 
 class BookDetailView(generic.DetailView):
@@ -69,6 +75,11 @@ class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
     model = BookInstance
     template_name = 'catalog/bookinstance_list_borrowed_user.html'
     paginate_by = 10
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['favorite_list'] = Favorite.objects.filter(user=self.request.user)
+        return context
 
     def get_queryset(self):
         return (
@@ -231,4 +242,12 @@ class MyAccountView(LoginRequiredMixin, generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user'] = self.request.user
+        context['favorites'] = Favorite.objects.filter(user=self.request.user)
         return context
+
+
+@login_required
+def add_to_favorites(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    Favorite.objects.get_or_create(user=request.user, book=book)
+    return redirect('book-detail', pk=book.pk)

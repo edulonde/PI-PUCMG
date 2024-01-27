@@ -6,12 +6,16 @@ const app = Vue.createApp({
                 showDropdownAccount: false,
                 showSummary: false,
                 showSummaryAuthorDetail: false,
+                showBorrowed: false,
+                showFavorites: false,
+                showHistory: false,
                 statusClasses: {
                     'd': 'bg-green-500',
                     'r': 'bg-yellow-500',
                     'e': 'bg-orange-500',
                     'm': 'bg-red-500',
                 },
+
 
 
             }
@@ -25,7 +29,17 @@ const app = Vue.createApp({
             },
             toggleDropdownAccount() {
                 this.showDropdownAccount = !this.showDropdownAccount
-            }
+            },
+            toggleBorrowed() {
+                this.showBorrowed = !this.showBorrowed;
+            },
+            toggleFavorites() {
+                this.showFavorites = !this.showFavorites;
+            },
+            toggleHistory() {
+                this.showHistory = !this.showHistory;
+            },
+
 
         }
 

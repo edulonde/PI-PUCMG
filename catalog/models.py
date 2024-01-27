@@ -3,7 +3,7 @@ from django.urls import reverse  # Used to generate URLs by reversing the URL pa
 import uuid  # Required for unique book instances
 from django.conf import settings
 from datetime import date
-
+from django.contrib.auth.models import User
 
 class Genre(models.Model):
     """Model representing a book genre."""
@@ -141,3 +141,10 @@ class Author(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.last_name}, {self.first_name}'
+
+class Favorite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    book = models.ForeignKey('Book', on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'book')
