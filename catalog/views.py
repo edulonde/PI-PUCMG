@@ -43,6 +43,12 @@ class BookListView(generic.ListView):
 class BookDetailView(generic.DetailView):
     model = Book
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context['is_favorite'] = Favorite.objects.filter(user=self.request.user, book=self.object).exists()
+        return context
+
 
 class AuthorListView(generic.ListView):
     model = Author
@@ -247,7 +253,9 @@ class MyAccountView(LoginRequiredMixin, generic.TemplateView):
 
 
 @login_required
-def add_to_favorites(request, pk):
+def toggle_favorite(request, pk):
     book = get_object_or_404(Book, pk=pk)
-    Favorite.objects.get_or_create(user=request.user, book=book)
-    return redirect('book-detail', pk=book.pk)
+    favorite, created = Favorite.objects.get_or_create(user=request.user, book=book)
+    if not created:
+        favorite.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

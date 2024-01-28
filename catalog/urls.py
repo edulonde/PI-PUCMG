@@ -21,6 +21,6 @@ urlpatterns = [
     path('genre/<int:pk>/books/', views.books_by_genre, name='books-by-genre'),
     path('register', views.register_request, name="register"),
     path('myaccount/', views.MyAccountView.as_view(), name='my-account'),
-    path('book/<int:pk>/add_to_favorites/', views.add_to_favorites, name='add-to-favorites'),
+    path('book/<int:pk>/toggle_favorite/', views.toggle_favorite, name='toggle-favorite'),
 
 ]

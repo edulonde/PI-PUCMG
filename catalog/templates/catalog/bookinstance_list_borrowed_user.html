@@ -5,46 +5,38 @@
 
 {% block content %}
 
-<h1 @click="toggleBorrowed">Livros Emprestados</h1>
+<h1 @click="toggleBorrowed" class="cursor-pointer">Livros Emprestados</h1>
 <div v-if="showBorrowed">
-    <!-- Conteúdo da seção de livros emprestados -->
     {% if bookinstance_list %}
-    <ul>
-
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {% for bookinst in bookinstance_list %}
-        <li class="{% if bookinst.is_overdue %}text-danger{% endif %}">
-            <a href="{% url 'book-detail' bookinst.book.pk %}">{{ bookinst.book.title }}</a> ({{ bookinst.due_back }})
-        </li>
+        <div class="border p-4 rounded-lg shadow-lg">
+            <a href="{% url 'book-detail' bookinst.book.pk %}" class="text-lg font-bold">{{ bookinst.book.title }}</a>
+            <p class="text-sm text-gray-500">{{ bookinst.due_back }}</p>
+        </div>
         {% endfor %}
-    </ul>
-
+    </div>
     {% else %}
     <p>Não há livros emprestados.</p>
     {% endif %}
-
 </div>
 
-<h1 @click="toggleFavorites">Meus Favoritos</h1>
+<h1 @click="toggleFavorites" class="cursor-pointer">Meus Favoritos</h1>
 <div v-if="showFavorites">
-    <!-- Conteúdo da seção de livros favoritos -->
     {% if favorite_list %}
-    <ul>
-
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {% for favorite in favorite_list %}
-        <li>
-            <a href="{% url 'book-detail' favorite.book.pk %}">{{ favorite.book.title }}</a>
-        </li>
+        <div class="border p-4 rounded-lg shadow-lg">
+            <a href="{% url 'book-detail' favorite.book.pk %}" class="text-lg font-bold">{{ favorite.book.title }}</a>
+        </div>
         {% endfor %}
-    </ul>
-
+    </div>
     {% else %}
     <p>Não há livros favoritos.</p>
     {% endif %}
-
 </div>
 
-
-<h1 @click="toggleHistory">Histórico de Empréstimos</h1>
+<h1 @click="toggleHistory" class="cursor-pointer">Histórico de Empréstimos</h1>
 <div v-if="showHistory">
     <!-- Conteúdo da seção de histórico de empréstimos -->
     {% if history_list %}
