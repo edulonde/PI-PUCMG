@@ -47,7 +47,7 @@
         {% endfor %}
 
         <!--FAVORITO-->
-        <a href="{% url 'toggle-favorite' book.id %}" class="absolute top-0 right-0">
+        <a href="{% url 'toggle-favorite' book.id %}" class="absolute bottom-0 right-0 mr-4 mb-6">
             {% if is_favorite %}
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                 <path fill-rule="evenodd"

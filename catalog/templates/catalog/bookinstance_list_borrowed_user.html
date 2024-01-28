@@ -24,13 +24,13 @@
 <h1 @click="toggleFavorites" class="cursor-pointer">Meus Favoritos</h1>
 <div v-if="showFavorites">
     {% if favorite_list %}
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <ul class="list-disc pl-5">
         {% for favorite in favorite_list %}
-        <div class="border p-4 rounded-lg shadow-lg">
-            <a href="{% url 'book-detail' favorite.book.pk %}" class="text-lg font-bold">{{ favorite.book.title }}</a>
-        </div>
+        <li class="py-1">
+            <a href="{% url 'book-detail' favorite.book.pk %}" class="text-lg">{{ favorite.book.title }}</a>
+        </li>
         {% endfor %}
-    </div>
+    </ul>
     {% else %}
     <p>Não há livros favoritos.</p>
     {% endif %}
@@ -38,17 +38,15 @@
 
 <h1 @click="toggleHistory" class="cursor-pointer">Histórico de Empréstimos</h1>
 <div v-if="showHistory">
-    <!-- Conteúdo da seção de histórico de empréstimos -->
-    {% if history_list %}
-    <ul>
-
-        {% for history in history_list %}
-        <li>
-            <a href="{% url 'book-detail' history.book.pk %}">{{ history.book.title }}</a> ({{ history.borrow_date }} - {{ history.return_date }})
+    {% if loaned_books %}
+    <ul class="list-disc pl-5">
+        {% for bookinst in loaned_books %}
+        <li class="py-1">
+            <a href="{% url 'book-detail' bookinst.book.pk %}" class="text-lg">{{ bookinst.book.title }}</a>
+            <p class="text-sm text-gray-500">{{ bookinst.due_back }}</p>
         </li>
         {% endfor %}
     </ul>
-
     {% else %}
     <p>Não há histórico de empréstimos.</p>
     {% endif %}

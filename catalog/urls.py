@@ -22,5 +22,6 @@ urlpatterns = [
     path('register', views.register_request, name="register"),
     path('myaccount/', views.MyAccountView.as_view(), name='my-account'),
     path('book/<int:pk>/toggle_favorite/', views.toggle_favorite, name='toggle-favorite'),
+    path('book/<uuid:pk>/return/', views.return_book_librarian, name='return-book-librarian'),
 
 ]

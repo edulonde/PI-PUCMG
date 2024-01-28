@@ -13,6 +13,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth import login, forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
+from django.views.decorators.cache import never_cache
 
 
 def index(request):
@@ -85,6 +86,7 @@ class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['favorite_list'] = Favorite.objects.filter(user=self.request.user)
+        context['loaned_books'] = BookInstance.objects.filter(borrower=self.request.user).exclude(status='d')
         return context
 
     def get_queryset(self):
@@ -259,3 +261,19 @@ def toggle_favorite(request, pk):
     if not created:
         favorite.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+@login_required
+@permission_required('catalog.can_mark_returned', raise_exception=True)
+@never_cache
+def return_book_librarian(request, pk):
+    """View function for returning a specific BookInstance by librarian."""
+    book_instance = get_object_or_404(BookInstance, pk=pk)
+
+    # Update the status and return date of the book instance
+    book_instance.status = 'd'
+    book_instance.return_date = datetime.date.today()
+    book_instance.due_back = None
+    book_instance.save()
+
+    # redirect to a new URL:
+    return HttpResponseRedirect(reverse('all-borrowed'))

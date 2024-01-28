@@ -20,7 +20,9 @@
         <p class="text-sm text-gray-500 mb-1">{{ bookinst.due_back }}</p>
         {% if perms.catalog.can_mark_returned %}
         <a href="{% url 'renew-book-librarian' bookinst.id %}"
-           class=" ml-auto bg-blue-500 text-white rounded px-4 py-2 cursor-pointer hover:bg-blue-700">Renew</a>
+           class=" ml-auto bg-blue-500 text-white rounded px-4 py-2 cursor-pointer hover:bg-blue-700">Renovar</a>
+        <a href="{% url 'return-book-librarian' bookinst.id %}"
+           class=" ml-auto bg-red-500 text-white rounded px-4 py-2 cursor-pointer hover:bg-red-700">Devolver</a>
         {% endif %}
     </li>
 
