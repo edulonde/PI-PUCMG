@@ -679,6 +679,10 @@ video {
   margin-right: 1rem;
 }
 
+.mr-\[-16px\] {
+  margin-right: -16px;
+}
+
 .mt-1 {
   margin-top: 0.25rem;
 }
@@ -709,10 +713,6 @@ video {
 
 .mt-auto {
   margin-top: auto;
-}
-
-.mr-\[-16px\] {
-  margin-right: -16px;
 }
 
 .block {
@@ -779,6 +779,10 @@ video {
   width: 50%;
 }
 
+.w-32 {
+  width: 8rem;
+}
+
 .w-4 {
   width: 1rem;
 }
@@ -793,18 +797,6 @@ video {
 
 .w-full {
   width: 100%;
-}
-
-.w-48 {
-  width: 12rem;
-}
-
-.w-36 {
-  width: 9rem;
-}
-
-.w-32 {
-  width: 8rem;
 }
 
 .max-w-4xl {
