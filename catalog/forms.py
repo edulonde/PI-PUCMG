@@ -101,3 +101,7 @@ class NewUserForm(UserCreationForm):
         )
 
         return user
+
+
+class BorrowBookForm(forms.Form):
+    user = forms.ModelChoiceField(queryset=User.objects.all())

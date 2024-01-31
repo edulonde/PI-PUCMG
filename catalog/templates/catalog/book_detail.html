@@ -11,7 +11,7 @@
          class="relative border border-gray-300 p-4 rounded-lg shadow-lg mt-5">
 
         <!--TÍTULO-->
-        <h1 class="text-center text-4xl sm:text-5xl font-bold text-shadow-lg pt-5 pb-3 w-full
+        <h1 class="text-center text-2xl sm:text-3xl font-bold text-shadow-lg pt-5 pb-3 w-full
     text-center text-shadow-lg pt-5 pb-3 text-gray-800">
             {{ book.title }}
         </h1>
@@ -24,7 +24,7 @@
         <!--SUMÁRIO-->
         <span id="toggle-summary-btn"
               @click="toggleSummary"
-              class="ml-2 flex items-center w-full font-bold text-gray-500 mb-4"
+              class="ml-2 flex items-center w-full font-bold text-gray-500 mb-4 text-base"
         >Sinopse
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
          class="w-4 h-4">
@@ -47,6 +47,8 @@
         {% endfor %}
 
         <!--FAVORITO-->
+
+        {% if not user.is_staff and not user.is_superuser %}
         <a href="{% url 'toggle-favorite' book.id %}" class="absolute bottom-0 right-0 mr-4 mb-6">
             {% if is_favorite %}
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
@@ -62,6 +64,8 @@
             </svg>
             {% endif %}
         </a>
+        {% endif %}
+
 
         <!--AÇÕES DO STAFF-->
         {% if perms.catalog.change_author or perms.catalog.delete_author %}
@@ -75,7 +79,11 @@
             </li>
             {% endif %}
             {% if not book.bookinstance_set.all and perms.catalog.delete_author %}
-            <li><a href="{% url 'book-delete' book.id %}">Deletar</a></li>
+            <li>
+                <a
+                        class="bg-red-500 hover:bg-red-50 text-white font-bold py-2 px-4 rounded"
+                        href="{% url 'book-delete' book.id %}">Deletar</a>
+            </li>
 
             {% endif %}
         </ul>

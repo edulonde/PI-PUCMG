@@ -1,0 +1,30 @@
+{% extends "base_generic.html" %}
+{% block title %}
+<title>Emprestar Livro</title>
+{% endblock %}
+{% block content %}
+<div class="flex flex-col justify-center bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
+    <h1 class="mt-6 text-2xl font-extrabold text-gray-900">Emprestar: {{ book_instance.book.title }}</h1>
+
+    <form action="" method="post" class="mt-8 space-y-4 max-w-md">
+        {% csrf_token %}
+        <div>
+            <label for="{{ form.user.id_for_label }}"
+                   class="block text-sm font-medium text-gray-700">Usuário</label>
+            {{ form.user }}
+        </div>
+        <div>
+            <label for="{{ form.due_back.id_for_label }}"
+                   class="block text-sm font-medium text-gray-700">Data de devolução</label>
+            {{ form.due_back }}
+        </div>
+        <div>
+            <input type="submit"
+                   value="Confirmar"
+                   class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium
+           rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2
+           focus:ring-offset-2 focus:ring-indigo-500">
+        </div>
+    </form>
+</div>
+{% endblock %}

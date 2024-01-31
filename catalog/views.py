@@ -1,7 +1,11 @@
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
+from django.utils import timezone
 from django.views import generic
 from django.db.models import Count
-from .forms import BookForm, NewUserForm
+from social_core.backends import username
+
+from .forms import BookForm, NewUserForm, BorrowBookForm
 from .models import Book, Author, BookInstance, Genre, Favorite
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponseRedirect
@@ -14,6 +18,9 @@ from django.contrib.auth import login, forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.views.decorators.cache import never_cache
+from django.contrib.auth.models import User
+from django.forms import ModelChoiceField
+from django.db.models import Case, When, Value
 
 
 def index(request):
@@ -102,11 +109,20 @@ class LoanedBooksAllListView(PermissionRequiredMixin, generic.ListView):
     model = BookInstance
     permission_required = 'catalog.can_mark_returned'
     template_name = 'catalog/bookinstance_list_borrowed_all.html'
-    paginate_by = 10
+    paginate_by = 100
 
     def get_queryset(self):
-        return BookInstance.objects.filter(status__exact='e').order_by('due_back')
-
+        return (
+            BookInstance.objects.all()
+            .annotate(
+                order=Case(
+                    When(~Q(due_back=None), then=Value(1)),
+                    When(status='e', then=Value(2)),
+                    default=Value(3),
+                )
+            )
+            .order_by('order', 'due_back')
+        )
 
 @login_required
 @permission_required('catalog.can_mark_returned', raise_exception=True)
@@ -262,6 +278,7 @@ def toggle_favorite(request, pk):
         favorite.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
+
 @login_required
 @permission_required('catalog.can_mark_returned', raise_exception=True)
 @never_cache
@@ -270,10 +287,37 @@ def return_book_librarian(request, pk):
     book_instance = get_object_or_404(BookInstance, pk=pk)
 
     # Update the status and return date of the book instance
+    print(book_instance.status, book_instance.return_date, book_instance.due_back, book_instance.pk)
     book_instance.status = 'd'
     book_instance.return_date = datetime.date.today()
     book_instance.due_back = None
+    print(book_instance.status, book_instance.return_date, book_instance.due_back, book_instance.pk)
     book_instance.save()
 
     # redirect to a new URL:
     return HttpResponseRedirect(reverse('all-borrowed'))
+
+
+@login_required
+def borrow_book(request, pk):
+    """View function for borrowing a specific BookInstance."""
+    book_instance = get_object_or_404(BookInstance, pk=pk)
+
+    if request.method == 'POST':
+        form = BorrowBookForm(request.POST)
+        if form.is_valid():
+            user = form.cleaned_data['user']
+            book_instance.status = 'e'
+            book_instance.due_back = timezone.now() + datetime.timedelta(days=15)
+            book_instance.borrower = user
+            book_instance.save()
+            return HttpResponseRedirect(reverse('all-borrowed'))
+    else:
+        form = BorrowBookForm()
+
+    context = {
+        'form': form,
+        'book_instance': book_instance,
+    }
+
+    return render(request, 'catalog/book_borrow.html', context)

@@ -2,8 +2,11 @@ from django.db import models
 from django.urls import reverse  # Used to generate URLs by reversing the URL patterns
 import uuid  # Required for unique book instances
 from django.conf import settings
-from datetime import date
+from datetime import date, timedelta
+from django.utils import timezone
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import permission_required
+
 
 class Genre(models.Model):
     """Model representing a book genre."""
@@ -89,7 +92,6 @@ class BookInstance(models.Model):
     due_back = models.DateField(null=True, blank=True)
     return_date = models.DateField(null=True, blank=True)
 
-
     LOAN_STATUS = (
         ('m', 'Manutenção'),
         ('e', 'Em empréstimo'),
@@ -101,7 +103,7 @@ class BookInstance(models.Model):
         max_length=1,
         choices=LOAN_STATUS,
         blank=True,
-        default='m',
+        default='d',
         help_text='Disponibilidade do livro',
     )
 
@@ -112,12 +114,17 @@ class BookInstance(models.Model):
         """Determines if the book is overdue based on due date and current date."""
         return bool(self.due_back and date.today() > self.due_back)
 
+    @permission_required('catalog.can_borrow')
+    def emprestar(self):
+        self.status = 'e'
+        self.due_back = timezone.now() + timedelta(days=15)
+        self.save()
+
     class Meta:
         ordering = ['due_back']
         verbose_name = 'Exemplar'
         verbose_name_plural = 'Exemplares'
-        permissions = (("can_mark_returned", "Set book as returned"),)
-
+        permissions = (("can_mark_returned", "Set book as returned"), ("can_borrow", "Borrow a book"))
 
     def __str__(self):
         """String for representing the Model object."""
@@ -143,6 +150,7 @@ class Author(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.last_name}, {self.first_name}'
+
 
 class Favorite(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

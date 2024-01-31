@@ -1,35 +1,66 @@
 {% extends "base_generic.html" %}
 
+
+{% block searchbar %}
+{% endblock %}
+
+
 {% block title %}
 <title>Livros Emprestados</title>
 {% endblock %}
 
 {% block content %}
-<h1 class="text-3xl sm:text-5xl font-bold text-center py-4">Renovar</h1>
+<h1 class="text-2xl sm:text-3xl font-bold text-center py-4 text-gray-800">Exemplares</h1>
 
 {% if bookinstance_list %}
-<ul class="space-y-4">
+<div class="overflow-x-auto">
+    <table id="myTable" class="table-auto w-full">
+        <thead>
+        <tr>
+            <th class="px-2  py-2 text-gray-800">Título</th>
+            <th class="px-2  py-2 text-gray-800">Devolução</th>
+            <th class="px-2  py-2 text-gray-800">Cliente</th>
+            <th class="px-2  py-2 text-gray-800">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for bookinst in bookinstance_list %}
+        <tr data-status="{{ bookinst.status }}"
+            class="{% if bookinst.status == 'e' %}bg-orange-400 bg-opacity-50{% else %}bg-gray-100{% endif %} text-sm">
+            <td class="border px-2 py-1"><a href="{% url 'book-detail' bookinst.book.pk %}">{{bookinst.book.title}}</a>
+            </td>
+            <td class="border px-2 py-1">{{ bookinst.due_back|date:"d/m"|default:" --- " }}</td>
+            <td class="border px-2 py-1">{{ bookinst.borrower|default:" --- " }}</td>
+            <td class="border px-2 py-1 flex space-x-2">
+                {% if perms.catalog.can_mark_returned %}
+                <a href="{% url 'borrow-book' bookinst.id %}"
+                   class="bg-blue-500 text-white w-6 h-6 px-2 py-2 cursor-pointer hover:bg-blue-700 rounded-full
+flex items-center justify-center">
+                    <span class="text-xs">E</span>
+                </a>
 
-    {% for bookinst in bookinstance_list %}
-
-    <li class=" mx-auto max-w-96 border border-gray-300 p-4 rounded-lg shadow-lg {% if bookinst.is_overdue %}bg-red-200{% endif %}">
-        <h2 class="text-xl font-bold mb-1">
-            <a href="{% url 'book-detail' bookinst.book.pk %}">{{bookinst.book.title}}</a>
-        </h2>
-        <p class="text-lg text-gray-700 mb-1">{{ bookinst.borrower }}</p>
-        <p class="text-sm text-gray-500 mb-1">{{ bookinst.due_back }}</p>
-        {% if perms.catalog.can_mark_returned %}
-        <a href="{% url 'renew-book-librarian' bookinst.id %}"
-           class=" ml-auto bg-blue-500 text-white rounded px-4 py-2 cursor-pointer hover:bg-blue-700">Renovar</a>
-        <a href="{% url 'return-book-librarian' bookinst.id %}"
-           class=" ml-auto bg-red-500 text-white rounded px-4 py-2 cursor-pointer hover:bg-red-700">Devolver</a>
-        {% endif %}
-    </li>
-
-    {% endfor %}
-</ul>
-
+                <a href="{% url 'renew-book-librarian' bookinst.id %}"
+                   class="bg-green-500 text-white w-6 h-6 px-2 py-2 cursor-pointer hover:bg-green-700 rounded-full
+flex items-center justify-center">
+                    <span class="text-xs">R</span>
+                </a>
+                <a href="{% url 'return-book-librarian' bookinst.id %}"
+                   class="bg-red-500 text-white w-6 h-6 px-2 py-2 cursor-pointer hover:bg-red-700 rounded-full
+flex items-center justify-center">
+                    <span class="text-xs">D</span>
+                </a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% else %}
 <p>There are no books borrowed.</p>
 {% endif %}
+
+<!-- Certifique-se de que o jQuery foi incluído antes deste script -->
+
+
 {% endblock %}

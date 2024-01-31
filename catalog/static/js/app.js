@@ -9,6 +9,7 @@ const app = Vue.createApp({
                 showBorrowed: false,
                 showFavorites: false,
                 showHistory: false,
+                showBorrowModal: false,
                 statusClasses: {
                     'd': 'bg-green-500',
                     'r': 'bg-yellow-500',
@@ -46,7 +47,6 @@ const app = Vue.createApp({
 
     }
 )
-
 
 app.mount('#app')
 
