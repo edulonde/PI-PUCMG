@@ -3,24 +3,21 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.views import generic
 from django.db.models import Count
-from social_core.backends import username
-
 from .forms import BookForm, NewUserForm, BorrowBookForm
 from .models import Book, Author, BookInstance, Genre, Favorite
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse, reverse_lazy
 import datetime
 from django.contrib.auth.decorators import login_required, permission_required
 from catalog.forms import RenewBookForm
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.contrib.auth import login, forms
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.views.decorators.cache import never_cache
-from django.contrib.auth.models import User
-from django.forms import ModelChoiceField
 from django.db.models import Case, When, Value
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table
+from io import BytesIO
 
 
 def index(request):
@@ -291,6 +288,7 @@ def return_book_librarian(request, pk):
     book_instance.status = 'd'
     book_instance.return_date = datetime.date.today()
     book_instance.due_back = None
+    book_instance.borrower = None
     print(book_instance.status, book_instance.return_date, book_instance.due_back, book_instance.pk)
     book_instance.save()
 
@@ -321,3 +319,42 @@ def borrow_book(request, pk):
     }
 
     return render(request, 'catalog/book_borrow.html', context)
+
+def create_pdf(request):
+    # Cria um arquivo PDF em memória
+    buffer = BytesIO()
+
+    # Cria o objeto PDF, usando o buffer como destino
+    pdf = SimpleDocTemplate(buffer, pagesize=letter)
+
+    # Recupera todas as instâncias de livros do banco de dados
+    book_instances = BookInstance.objects.all()
+
+    # Cria uma lista para armazenar os dados da tabela
+    data = []
+
+    # Adiciona o cabeçalho da tabela
+    data.append(["Book Title", "Book Author", "Book Status"])
+
+    # Adiciona os dados de cada instância de livro na tabela
+    for instance in book_instances:
+        data.append([instance.book.title, instance.book.author, instance.status])
+
+    # Cria a tabela no PDF
+    table = Table(data)
+
+    # Adiciona a tabela ao PDF
+    elements = []
+    elements.append(table)
+
+    # Constrói o PDF
+    pdf.build(elements)
+
+    # Recupera o valor do PDF a partir do buffer
+    pdf_value = buffer.getvalue()
+    buffer.close()
+
+    # Cria a resposta HTTP enviando o PDF gerado
+    response = HttpResponse(pdf_value, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=book_instances.pdf'
+    return response
