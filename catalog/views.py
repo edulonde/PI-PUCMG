@@ -121,6 +121,7 @@ class LoanedBooksAllListView(PermissionRequiredMixin, generic.ListView):
             .order_by('order', 'due_back')
         )
 
+
 @login_required
 @permission_required('catalog.can_mark_returned', raise_exception=True)
 def renew_book_librarian(request, pk):
@@ -319,6 +320,7 @@ def borrow_book(request, pk):
     }
 
     return render(request, 'catalog/book_borrow.html', context)
+
 
 def create_pdf(request):
     # Cria um arquivo PDF em memória
