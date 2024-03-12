@@ -31,5 +31,13 @@
 
         <!-- Mais Seções do Dashboard (Adicione conforme necessário) -->
     </div>
+    <div class="flex justify-center">
+<a id="botao-exportar"
+   href="{% url 'export-to-pdf' %}"
+   class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded
+          inline-block mx-auto text-center mt-6">
+    Exportar dados para PDF
+</a>
+</div>
 </div>
 {% endblock %}

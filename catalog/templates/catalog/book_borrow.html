@@ -15,8 +15,10 @@
         </div>
         <div>
             <label for="{{ form.due_back.id_for_label }}"
-                   class="block text-sm font-medium text-gray-700">Data de devolução</label>
-            {{ form.due_back }}
+                   class="block text-sm font-medium text-gray-700">Data de devolução:</label>
+            {{ data_entrega|date:"d/m/Y" }}
+
+
         </div>
         <div>
             <input type="submit"

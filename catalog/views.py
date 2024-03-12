@@ -16,8 +16,10 @@ from django.contrib import messages
 from django.views.decorators.cache import never_cache
 from django.db.models import Case, When, Value
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table
+from reportlab.platypus import SimpleDocTemplate, Table,TableStyle
 from io import BytesIO
+from reportlab.lib import colors
+
 
 
 def index(request):
@@ -317,6 +319,7 @@ def borrow_book(request, pk):
     context = {
         'form': form,
         'book_instance': book_instance,
+        'data_entrega': timezone.now() + datetime.timedelta(days=15),
     }
 
     return render(request, 'catalog/book_borrow.html', context)
@@ -332,18 +335,56 @@ def create_pdf(request):
     # Recupera todas as instâncias de livros do banco de dados
     book_instances = BookInstance.objects.all()
 
+    # Recupera os dados necessários para o dashboard
+    num_books = Book.objects.all().count()
+    num_instances = BookInstance.objects.all().count()
+    num_instances_disponivel = BookInstance.objects.filter(status__exact='d').count()
+    num_instances_emprestado = BookInstance.objects.filter(status__exact='e').count()
+    num_instances_manutencao = BookInstance.objects.filter(status__exact='m').count()
+    num_instances_reservado = BookInstance.objects.filter(status__exact='r').count()
+    num_authors = Author.objects.count()
+    num_genres = Genre.objects.count()
+
     # Cria uma lista para armazenar os dados da tabela
     data = []
 
+
+    # Adiciona os dados do dashboard na tabela
+    data.append(["Número de Livros:", "", num_books])
+    data.append(["Número de Exemplares:", "", num_instances])
+    data.append(["Disponíveis:", "", num_instances_disponivel])
+    data.append(["Emprestados:", "", num_instances_emprestado])
+    data.append(["Em Manutenção:", "", num_instances_manutencao])
+    data.append(["Reservados:", "", num_instances_reservado])
+    data.append(["Total de Autores: ", "", num_authors])
+    data.append(["Total de Gêneros", "", num_genres])
+
+    # Adiciona uma linha em branco para separar os itens do dashboard da lista de exemplares
+    data.append(["", "", ""])
+
+
     # Adiciona o cabeçalho da tabela
-    data.append(["Book Title", "Book Author", "Book Status"])
+    data.append(["Título", "Autor", "Status"])
+
 
     # Adiciona os dados de cada instância de livro na tabela
     for instance in book_instances:
         data.append([instance.book.title, instance.book.author, instance.status])
 
+
+
+
     # Cria a tabela no PDF
     table = Table(data)
+
+
+    # Adiciona estilos à tabela
+    style = TableStyle([
+        ('FONTNAME', (0, 8), (-1, 8), 'Helvetica-Bold'),
+        ('FONTNAME', (0, 9), (-1, 9), 'Helvetica-Bold'),
+        ('LINEABOVE', (0, 10), (-1, 10), 1, colors.black),
+    ])
+    table.setStyle(style)
 
     # Adiciona a tabela ao PDF
     elements = []
